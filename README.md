@@ -42,13 +42,13 @@ The recommended way to use the language is with the toplevel interpreter in this
 First, you will need [The Haskell Stack](https://docs.haskellstack.org/en/stable/README/).
 Then, simply run
 ```
-stack install dater
+stack install
 ```
+This will copy the `dater` binary to `~/.local/bin/` on Linux systems.
 
 ## Running the toplevel
-Then, running this binary, you will get the prompt:
 ```
-~$ ./dater
+~$ dater
 Welcome to dater, date calculations done easy!
 dater$>
 ```

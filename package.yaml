@@ -1,10 +1,10 @@
 name:                dater
 version:             0.1.0.0
-github:              "githubuser/dater"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+github:              "wonhyukchoi/dater"
+license:             MIT
+author:              "Wonhyuk Choi"
+maintainer:          "wonhyuk.choi@columbia.edu"
+copyright:           "2021 Wonhyuk Choi"
 
 extra-source-files:
 - README.md
@@ -17,7 +17,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/dater#readme>
+description:         Please see the README on GitHub at <https://github.com/wonhyukchoi/dater#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -26,7 +26,7 @@ library:
   source-dirs: src
 
 executables:
-  dater-exe:
+  dater:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
