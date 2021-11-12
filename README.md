@@ -12,20 +12,30 @@ OP    ::= + | -
 DATE  ::= (YEAR, MONTH, DAY)
 ```
 ## Description
-A `dater` program consists of just one command: adding or subtracting of two dates.
+A `dater` program consists of just one command: adding dates or finding the difference two dates.
 Each date consists of a year, month, and a day.
-These do not necessarily need to be actual dates, however; you can, for instance, add a week:
+
+The `+` operator will add the two dates:
 ```
-dater$> (2021, 11, 12) + (0,1,0)
-(2021, 11, 19)
+dater$> (2000, 3, 2) + week(1)
+2000/3/9
 ```
+
+The `-` operator will find the distance between two dates.
+```
+dater$> (2021, 11, 12) - (2022, 1, 1)
+50
+```
+
+
 ## Syntactic Sugar
-Four syntactic sugar functions exist to make `dater` easier to use.
+Five syntactic sugar functions exist to make `dater` easier to use.
 ```
-* day(x)  => (0,0,x)
-* week(y) => (0,y,0)
-* year(z) => (z,0,0)
-* today   => Date object corresponding to today's date
+* day(x)   => (0,0,x)
+* week(y)  => (0,0,7y)
+* month(z) => (z,0,0)
+* year(w)  => (w,0,0)
+* today    => Date object corresponding to today's date
 ```
 
 Let today be November 12th, 2021.
