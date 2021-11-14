@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Parser
     ( parse
     , Date(..)
@@ -11,8 +13,6 @@ import Text.Parsec.String (Parser)
 import qualified Text.Parsec as Parsec
 import qualified Text.Parsec.Expr as Ex
 import qualified Text.Parsec.Token as Tok
-
-import Lexer
 
 data Op = Plus | Minus deriving (Eq, Show)
 
@@ -28,25 +28,46 @@ tokenizeOp = do
   operand <- Parsec.oneOf "+-"
   return $ adtify operand
   where adtify '+' = Plus
-        adtify _   = Minus
+        adtify '-' = Minus
 
-tokenizeInt :: Parser Integer
-tokenizeInt = Tok.integer lexer
+tokenizeInt :: Parser Int
+tokenizeInt = do
+  n <- Parsec.many1 Parsec.digit
+  return $ read n
 
-dateParse :: Parser Date
-dateParse = do
+-- TODO: a sane way to do lexing
+parseDate :: Parser Date
+parseDate = do
+  Parsec.spaces
   Parsec.char '('
+  Parsec.spaces
   year <- tokenizeInt
+  Parsec.spaces
   Parsec.char ','
+  Parsec.spaces
   month <- tokenizeInt
+  Parsec.spaces
   Parsec.char ','
-  Parsec.char ')'
+  Parsec.spaces
   day <- tokenizeInt
+  Parsec.spaces
+  Parsec.char ')'
+  Parsec.spaces
   return $ Date (fromIntegral year) (fromIntegral month) (fromIntegral day)
 
-parse :: Parser (Date, Op, Date)
-parse = do
-  date1 <- dateParse
+parseExpr :: Parser (Op, Date, Date)
+parseExpr = do
+  Parsec.spaces
+  date1 <- parseDate
+  Parsec.spaces
   operand <- tokenizeOp
-  date2 <- dateParse
-  return $ (date1, operand, date2)
+  Parsec.spaces
+  date2 <- parseDate
+  Parsec.spaces
+  return $ (operand, date1, date2)
+
+basicParser :: Parser a -> String -> Either Parsec.ParseError a
+basicParser p = Parsec.parse p ""
+
+parse :: String -> Either Parsec.ParseError (Op, Date, Date)
+parse = basicParser parseExpr

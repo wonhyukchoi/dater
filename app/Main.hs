@@ -3,7 +3,6 @@ module Main where
 import System.Environment(getArgs)
 import System.IO(hFlush, stdout)
 import System.Exit(die)
-import Lexer
 import Parser
 import Eval
 
