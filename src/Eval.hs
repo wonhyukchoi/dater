@@ -12,7 +12,7 @@ data ErrorType = DateError String
 eval :: Op -> Date -> Date -> EvalResult
 eval op fstDate sndDate = (eval' op) <$> checkValid fstDate <*> checkValid sndDate
   where
-    checkValid date@(Date y m d) = case fromGregorianValid y m d of 
+    checkValid date@(Date y m d) = case fromGregorianValid (fromIntegral y) m d of 
         Nothing  -> Left $ DateError $ show date ++ " is invalid"
         Just day -> Right $ day
 

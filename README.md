@@ -63,3 +63,6 @@ Welcome to dater, date calculations done easy!
 dater$>
 ```
 Then you are good to go!
+
+#### Acknowledgements
+The `Parsec` portions of the lexer/parser were adapted from [Stephen Diehl](https://www.stephendiehl.com/llvm/#full-source-1).
