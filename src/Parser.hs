@@ -38,21 +38,11 @@ tokenizeInt = do
 -- TODO: a sane way to do lexing
 parseDate :: Parser Date
 parseDate = do
-  Parsec.spaces
-  Parsec.char '('
-  Parsec.spaces
   year <- tokenizeInt
-  Parsec.spaces
-  Parsec.char ','
   Parsec.spaces
   month <- tokenizeInt
   Parsec.spaces
-  Parsec.char ','
-  Parsec.spaces
   day <- tokenizeInt
-  Parsec.spaces
-  Parsec.char ')'
-  Parsec.spaces
   return $ Date (fromIntegral year) (fromIntegral month) (fromIntegral day)
 
 parseExpr :: Parser (Op, Date, Date)
