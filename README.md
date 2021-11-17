@@ -46,15 +46,6 @@ dater$> 2021 11 12 - 2022 1 1
 0/1/20
 ```
 
-### Today
-
-Let today be November 12th, 2021.
-Then, in action, we have:
-```
-dater$> today + day(5)
-2021/11/7
-```
-
 # Usage
 The recommended way to use the language is with the toplevel interpreter in this repository.
 

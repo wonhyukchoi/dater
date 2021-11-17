@@ -12,6 +12,8 @@ import Control.Applicative((<|>))
 import Text.Parsec.String(Parser)
 import Text.Parsec(try)
 
+import Data.Time
+
 import qualified Text.Parsec as Parsec
 import qualified Text.Parsec.Expr as Ex
 import qualified Text.Parsec.Token as Tok
