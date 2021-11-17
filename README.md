@@ -35,8 +35,8 @@ Four syntactic sugar functions exist to make the `+` operator easier to use.
 
 Example:
 ```
-dater$> 2012 12 22 + week10
-2001/3/5
+dater$> 2012 12 22 + week 10
+2013/3/2
 ```
 
 ### The difference operator
@@ -55,7 +55,7 @@ Then, simply run
 ```
 stack install
 ```
-This will copy the `dater` binary to `~/.local/bin/` on Linux systems.
+This will copy the `dater` binary to your path (`~/.local/bin/` on Linux systems).
 
 ## Running the toplevel
 ```
@@ -63,4 +63,9 @@ This will copy the `dater` binary to `~/.local/bin/` on Linux systems.
 Welcome to dater, date calculations done easy!
 dater$>
 ```
-Then you are good to go!
+
+When you are done, exit with 
+```
+$>:q
+Goodbye.
+```
