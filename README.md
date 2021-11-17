@@ -29,7 +29,7 @@ Four syntactic sugar functions exist to make the `+` operator easier to use.
 ```
 * day   x  => 0 0 x
 * week  y  => 0 0 7y
-* month z  => z 0 0
+* month z  => 0 z 0
 * year  w  => w 0 0
 ```
 
