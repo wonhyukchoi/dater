@@ -15,17 +15,25 @@ DATE  ::= YEAR MONTH DAY
 A `dater` program consists of just one command: adding dates or finding the difference two dates.
 Each date consists of a year, month, and a day.
 
-The `+` operator will add the two dates:
+### The add operator
+
+The add `+` operator takes a \<y m d\> date and a \<y m d\> date shift to produce a new date.
 ```
-dater$> 2000 3 2 + week(1)
-2000/3/9
+dater$> 2000 3 2 + 1 0 3
+2001/3/5
 ```
 
-The `-` operator will find the distance between two dates.
+#### Syntactic sugar
+Several functions
+
+### The difference operator
+The difference `-` operator will find the distance between two dates.
 ```
 dater$> 2021 11 12 - 2022 1 1
 0/1/20
 ```
+
+### Today
 
 ## Syntactic Sugar
 Five syntactic sugar functions exist to make `dater` easier to use.
