@@ -36,8 +36,12 @@ tokenizeOp = do
 
 tokenizeInt :: Parser Int
 tokenizeInt = do
-  n <- Parsec.many1 Parsec.digit
-  return $ read n
+  neg <- Parsec.char '-' <|> return ' '
+  n   <- Parsec.many1 Parsec.digit
+  let isNeg   = neg == '-'
+  let readVal = read n
+  let result  = if isNeg then -readVal else readVal
+  return result
 
 -- FIXME: More sane way to do lexing
 parseDate :: Parser Date
