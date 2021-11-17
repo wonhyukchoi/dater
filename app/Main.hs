@@ -6,7 +6,6 @@ module Main where
 
 import Control.Monad.Trans
 import System.Console.Haskeline
-import System.Exit(die)
 
 import Parser
 import Eval
@@ -17,7 +16,7 @@ main = do
   runInputT defaultSettings loop
   where
     loop = do
-      minput <- getInputLine "$>"
+      minput <- getInputLine "$> "
       case minput of
         Nothing    -> return ()
         Just ":q"  -> outputStrLn "Goodbye."

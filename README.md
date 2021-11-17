@@ -18,13 +18,26 @@ Each date consists of a year, month, and a day.
 ### The add operator
 
 The add `+` operator takes a \<y m d\> date and a \<y m d\> date shift to produce a new date.
+
 ```
 dater$> 2000 3 2 + 1 0 3
 2001/3/5
 ```
 
-#### Syntactic sugar
-Several functions
+#### Syntactic Sugar
+Four syntactic sugar functions exist to make the `+` operator easier to use.
+```
+* day   x  => 0 0 x
+* week  y  => 0 0 7y
+* month z  => z 0 0
+* year  w  => w 0 0
+```
+
+Example:
+```
+dater$> 2012 12 22 + week10
+2001/3/5
+```
 
 ### The difference operator
 The difference `-` operator will find the distance between two dates.
@@ -34,16 +47,6 @@ dater$> 2021 11 12 - 2022 1 1
 ```
 
 ### Today
-
-## Syntactic Sugar
-Five syntactic sugar functions exist to make `dater` easier to use.
-```
-* day(x)   => 0 0 x
-* week(y)  => 0 0 7y
-* month(z) => z 0 0
-* year(w)  => w 0 0
-* today    => Date object corresponding to today's date
-```
 
 Let today be November 12th, 2021.
 Then, in action, we have:
