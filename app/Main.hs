@@ -16,7 +16,7 @@ main = do
   runInputT defaultSettings loop
   where
     loop = do
-      minput <- getInputLine "$> "
+      minput <- getInputLine "dater $> "
       case minput of
         Nothing    -> return ()
         Just ":q"  -> outputStrLn "Goodbye."

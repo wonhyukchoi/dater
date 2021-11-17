@@ -20,7 +20,7 @@ Each date consists of a year, month, and a day.
 The add `+` operator takes a \<y m d\> date and a \<y m d\> date shift to produce a new date.
 
 ```
-dater$> 2000 3 2 + 1 0 3
+dater $> 2000 3 2 + 1 0 3
 2001/3/5
 ```
 
@@ -35,14 +35,14 @@ Four syntactic sugar functions exist to make the `+` operator easier to use.
 
 Example:
 ```
-dater$> 2012 12 22 + week 10
+dater $> 2012 12 22 + week 10
 2013/3/2
 ```
 
 ### The difference operator
 The difference `-` operator will find the distance between two dates.
 ```
-dater$> 2021 11 12 - 2022 1 1
+dater $> 2021 11 12 - 2022 1 1
 0/1/20
 ```
 
@@ -61,11 +61,11 @@ This will copy the `dater` binary to your path (`~/.local/bin/` on Linux systems
 ```
 ~$ dater
 Welcome to dater, date calculations done easy!
-dater$>
+dater $>
 ```
 
 When you are done, exit with 
 ```
-$>:q
+dater $>:q
 Goodbye.
 ```
