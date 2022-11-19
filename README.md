@@ -7,11 +7,10 @@ No, unfortunately, this is not about dating.
 # The Language
 ## Formal grammar
 ```
-S     ::= DATE
-OP    ::= + | - | <>
-DATE  ::= YMD | TODAY | DATE OP DATE
-YMD   ::= year / month / day
-TODAY ::= today
+S     ::= DATE | DATE NUMOP YMD | DATE DIFF DATE
+NUMOP ::= + | -
+DIFF  ::= <>
+DATE  ::= YMD | TODAY
 ```
 
 ## Description
@@ -91,7 +90,6 @@ Goodbye.
 
 ### More features!
 * Use previous computation value (Python's `_` or ghci's `it`)
-* Raise error on erroneous dates, e.g. `0/112/33`
 * Run files instead of running the REPL, e.g. `dater foo.dtr`
 * Option to specify as days: `as_days today <> 1997/4/10`.
 This could be a toggle option.

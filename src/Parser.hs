@@ -18,7 +18,12 @@ import Text.Parsec.Language (emptyDef)
 
 import Text.Parsec.String (Parser)
 
-import Language (Operator(..), DateExpr(..), YMD(..))
+import Language ( Expr (..)
+                , NumOp (..)
+                , DiffOp (..)
+                , Date(..)
+                , YMD(..)
+                )
 
 -----------------------------------------------------------------------------
 
@@ -84,25 +89,40 @@ yearParser = do
 sugarParser :: Parser YMD
 sugarParser = dayParser <|> weekParser <|> monthParser <|> yearParser
 
-todayParser :: Parser DateExpr
+todayParser :: Parser Date
 todayParser = reserved "today" >> return Today
 
-dateTerm :: Parser DateExpr
-dateTerm = todayParser <|> dateParser'
+dateParser :: Parser Date
+dateParser = todayParser <|> dateParser'
   where dateParser' = liftM Date (ymdParser <|> sugarParser)
 
-dateOperators :: [[Expr.Operator String () Identity DateExpr]]
-dateOperators =
-  [
-    [ Expr.Infix  (reservedOp "+"  >> return (Expr Add )) Expr.AssocLeft
-    , Expr.Infix  (reservedOp "-"  >> return (Expr Sub )) Expr.AssocLeft
-    , Expr.Infix  (reservedOp "<>" >> return (Expr Diff)) Expr.AssocLeft
-    ]
-  ]
+numOpParser :: Parser NumOp
+numOpParser =  (reservedOp "+" >> return Add)
+           <|> (reservedOp "-" >> return Sub)
 
-dateParser :: Parser DateExpr
-dateParser = Expr.buildExpressionParser dateOperators dateTerm
+diffOpParser :: Parser DiffOp
+diffOpParser = reserved "<>" >> return Diff
 
-parseDater :: String -> Either Parsec.ParseError DateExpr
-parseDater input = Parsec.parse (dateParser <* Parsec.eof) errMsg input
+exprParser :: Parser Expr
+exprParser = do
+  date <- dateParser
+  let dateExpr :: Parser Expr
+      dateExpr = return $ DateExpr $ date
+
+      numOp :: Parser Expr
+      numOp = do
+        op  <- numOpParser
+        ymd <- ymdParser
+        return $ NumOp op date ymd
+
+      diffOp :: Parser Expr
+      diffOp = do
+        op   <- diffOpParser
+        date <- dateParser
+        return $ DiffOp op date date
+
+   in numOp <|> diffOp <|> dateExpr
+
+parseDater :: String -> Either Parsec.ParseError Expr
+parseDater input = Parsec.parse (exprParser <* Parsec.eof) errMsg input
   where errMsg = "Parser failed for " ++ input

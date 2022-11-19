@@ -1,4 +1,9 @@
-module Language (Operator(..), DateExpr(..), YMD(..)) where
+module Language ( Expr (..)
+                , NumOp (..)
+                , DiffOp (..)
+                , Date(..)
+                , YMD(..)
+                ) where
 
 -----------------------------------------------------------------------------
 
@@ -6,16 +11,19 @@ import Data.List (intercalate)
 
 -----------------------------------------------------------------------------
 
-data Operator = Add
-              | Sub
-              | Diff
-              deriving (Show, Eq)
+data Expr =
+    DateExpr Date
+  | NumOp NumOp Date YMD
+  | DiffOp DiffOp Date Date
 
-data DateExpr = 
-            Date YMD
-          | Today
-          | Expr Operator DateExpr DateExpr
-          deriving (Show, Eq)
+data NumOp = Add | Sub deriving (Show, Eq)
+
+data DiffOp = Diff deriving (Show, Eq)
+
+data Date = 
+    Date YMD
+  | Today
+  deriving (Show, Eq)
 
 data YMD = YMD { year  :: Integer
                , month :: Integer
