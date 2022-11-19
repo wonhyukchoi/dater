@@ -4,27 +4,30 @@
  -}
 module Main where
 
-import Control.Monad.Trans
-import System.Console.Haskeline
-
-import Parser
-import Eval
-
 main :: IO ()
-main = do
-  putStrLn "Welcome to dater, date calculations done easy!"
-  runInputT defaultSettings loop
-  where
-    loop = do
-      minput <- getInputLine "dater $> "
-      case minput of
-        Nothing    -> return ()
-        Just ":q"  -> outputStrLn "Goodbye."
-        Just input -> (liftIO $ process input) >> loop
+main = putStrLn "Hello World!"
 
-process :: String -> IO ()
-process line = do
-  let res = eval <$> (parse line)
-  case res of 
-    Left err -> print err
-    Right ex -> mapM_ print ex
+-- import Control.Monad.Trans
+-- import System.Console.Haskeline
+
+-- import Parser
+-- import Eval
+
+-- main :: IO ()
+-- main = do
+--   putStrLn "Welcome to dater, date calculations done easy!"
+--   runInputT defaultSettings loop
+--   where
+--     loop = do
+--       minput <- getInputLine "dater $> "
+--       case minput of
+--         Nothing    -> return ()
+--         Just ":q"  -> outputStrLn "Goodbye."
+--         Just input -> (liftIO $ process input) >> loop
+
+-- process :: String -> IO ()
+-- process line = do
+--   let res = eval <$> (parse line)
+--   case res of 
+--     Left err -> print err
+--     Right ex -> mapM_ print ex
