@@ -27,6 +27,7 @@ dependencies:
 - hspec
 - filepath
 - directory
+- ansi-terminal
 
 library:
   source-dirs: src

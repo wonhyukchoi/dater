@@ -6,7 +6,11 @@ import qualified Text.Parsec as Parsec
 
 import qualified Text.Parsec.Token as Token
 
+import qualified Text.Parsec.Expr as Expr
+
 import Control.Applicative ((<|>))
+
+import Control.Monad (liftM)
 
 import Data.Functor.Identity (Identity)
 
@@ -14,17 +18,22 @@ import Text.Parsec.Language (emptyDef)
 
 import Text.Parsec.String (Parser)
 
-import Expr (Expr(..), Operator(..), Date(..))
+import Language (Operator(..), DateExpr(..), YMD(..))
 
 -----------------------------------------------------------------------------
 
 daterDef :: Token.LanguageDef a
-daterDef = emptyDef { Token.opStart         = Parsec.oneOf "+-/"
-                    , Token.opLetter        = Parsec.oneOf "+-/"
+daterDef = emptyDef { Token.opStart         = Parsec.oneOf "+-/<"
+                    , Token.opLetter        = Parsec.oneOf "+-/>"
                     , Token.caseSensitive   = False
-                    , Token.reservedNames   = [ "now"
+                    , Token.reservedNames   = [ "today"
+                                              , "day"
+                                              , "month"
+                                              , "week"
+                                              , "year"
+                                              , "_"
                                               ]
-                    , Token.reservedOpNames = ["+", "-", "/"]
+                    , Token.reservedOpNames = ["+", "-", "/", "<>"]
                     }
 
 lexer :: Token.GenTokenParser String p Identity
@@ -39,11 +48,7 @@ reserved = Token.reserved lexer
 reservedOp :: String -> Parser ()
 reservedOp = Token.reservedOp lexer
 
-operatorParser :: Parser Operator
-operatorParser =  (reservedOp "+" >> return Add)
-              <|> (reservedOp "-" >> return Sub)
-
-ymdParser :: Parser Date
+ymdParser :: Parser YMD
 ymdParser = do
   year  <- integer
   _     <- reservedOp "/"
@@ -52,46 +57,52 @@ ymdParser = do
   day   <- integer
   return $ YMD year month day
 
-dayParser :: Parser Date
+dayParser :: Parser YMD
 dayParser = do
   _   <- reserved "day"
   num <- integer
   return $ YMD 0 0 num
 
-weekParser :: Parser Date
+weekParser :: Parser YMD
 weekParser = do
   _   <- reserved "week"
   num <- integer
   return $ YMD 0 0 $ 7 * num
 
-monthParser :: Parser Date
+monthParser :: Parser YMD
 monthParser = do
   _   <- reserved "month"
   num <- integer
   return $ YMD 0 1 0
 
-yearParser :: Parser Date
+yearParser :: Parser YMD
 yearParser = do
   _   <- reserved "year"
   num <- integer
   return $ YMD 1 0 0
 
-sugarParser :: Parser Date
+sugarParser :: Parser YMD
 sugarParser = dayParser <|> weekParser <|> monthParser <|> yearParser
 
-nowParser :: Parser Date
-nowParser = reserved "now" >> return Now
+todayParser :: Parser DateExpr
+todayParser = reserved "today" >> return Today
 
-dateParser :: Parser Date
-dateParser = nowParser <|> ymdParser <|> sugarParser
+dateTerm :: Parser DateExpr
+dateTerm = todayParser <|> dateParser'
+  where dateParser' = liftM Date (ymdParser <|> sugarParser)
 
-exprParser :: Parser Expr
-exprParser = (Parsec.spaces >>) $ do
-  lhs <- dateParser
-  op  <- operatorParser
-  rhs <- dateParser
-  return $ Expr op lhs rhs
+dateOperators :: [[Expr.Operator String () Identity DateExpr]]
+dateOperators =
+  [
+    [ Expr.Infix  (reservedOp "+"  >> return (Expr Add )) Expr.AssocLeft
+    , Expr.Infix  (reservedOp "-"  >> return (Expr Sub )) Expr.AssocLeft
+    , Expr.Infix  (reservedOp "<>" >> return (Expr Diff)) Expr.AssocLeft
+    ]
+  ]
 
-parseDater :: String -> Either Parsec.ParseError Expr
-parseDater input = Parsec.parse (exprParser <* Parsec.eof) errMsg input
+dateParser :: Parser DateExpr
+dateParser = Expr.buildExpressionParser dateOperators dateTerm
+
+parseDater :: String -> Either Parsec.ParseError DateExpr
+parseDater input = Parsec.parse (dateParser <* Parsec.eof) errMsg input
   where errMsg = "Parser failed for " ++ input

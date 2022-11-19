@@ -25,14 +25,15 @@ source-repository head
 library
   exposed-modules:
       Eval
-      Expr
+      Language
       Parser
   other-modules:
       Paths_dater
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      ansi-terminal
+    , base >=4.7 && <5
     , directory
     , filepath
     , haskeline
@@ -50,7 +51,8 @@ executable dater
       app
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      ansi-terminal
+    , base >=4.7 && <5
     , dater
     , directory
     , filepath
@@ -70,7 +72,8 @@ test-suite dater-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      ansi-terminal
+    , base >=4.7 && <5
     , dater
     , directory
     , filepath
