@@ -1,9 +1,7 @@
 
-module Lib (process) where
+module Dater (process) where
 
 -----------------------------------------------------------------------------
-
-import Language (YMD)
 
 import Parser (parseDater)
 

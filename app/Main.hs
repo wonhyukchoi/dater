@@ -16,7 +16,7 @@ import System.Console.ANSI
   , hSetSGR
   )
 
-import Lib (process)
+import Dater (process)
 
 main :: IO ()
 main = do

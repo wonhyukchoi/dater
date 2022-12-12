@@ -6,7 +6,9 @@ cabal-version: 1.12
 
 name:           dater
 version:        1.0.0
+synopsis:       DSL for date calculation
 description:    Please see the README on GitHub at <https://github.com/wonhyukchoi/dater#readme>
+category:       DSL
 homepage:       https://github.com/wonhyukchoi/dater#readme
 bug-reports:    https://github.com/wonhyukchoi/dater/issues
 author:         Wonhyuk Choi
@@ -24,11 +26,11 @@ source-repository head
 
 library
   exposed-modules:
+      Dater
+  other-modules:
       Eval
       Language
-      Lib
       Parser
-  other-modules:
       Paths_dater
   hs-source-dirs:
       src

@@ -5,6 +5,8 @@ license:             MIT
 author:              "Wonhyuk Choi"
 maintainer:          "wonhyuk.choi@columbia.edu"
 copyright:           "2021 Wonhyuk Choi"
+category:            "DSL"
+synopsis:            "DSL for date calculation"
 
 extra-source-files:
 - README.md
@@ -31,6 +33,8 @@ dependencies:
 
 library:
   source-dirs: src
+  exposed-modules:
+    Dater
 
 executables:
   dater:
