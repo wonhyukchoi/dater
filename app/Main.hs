@@ -1,7 +1,11 @@
 module Main where
 
-import Control.Monad.Trans
-import System.Console.Haskeline
+import Control.Monad.Trans (liftIO)
+import System.Console.Haskeline ( runInputT
+                                , defaultSettings
+                                , getInputLine
+                                , outputStrLn
+                                )
 
 import System.IO (hPutStrLn, stderr, stdout)
 import System.Console.ANSI
@@ -47,7 +51,6 @@ printInfo = do
                        , "dater $> 2022/11/22 - 0/11/1"
                        , "dater $> today <> 1997 / 4 / 10"
                        ]
-
 
 printErr :: (Show a) => a -> IO ()
 printErr s = do

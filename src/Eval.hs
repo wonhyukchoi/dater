@@ -26,10 +26,12 @@ import Language ( Expr (..)
                 , Date(..)
                 , YMD(..)
                 )
+  
+import Debug.Trace (trace)
 
 -----------------------------------------------------------------------------
 
-data DateError = DateError String
+newtype DateError = DateError String
 
 instance Show DateError where
   show (DateError val) = unwords ["Error:", "Date", val, "is invalid!"]
@@ -54,7 +56,7 @@ evalDate = \case
   Date ymd -> return $ validateYMD ymd
   Today    -> do
     let zonedTime2Gregorian = toGregorian . localDay . zonedTimeToLocalTime
-    (y, m, d) <- liftM zonedTime2Gregorian getZonedTime
+    (y, m, d) <- fmap zonedTime2Gregorian getZonedTime
     return $ return $ YMD y (fromIntegral m) (fromIntegral d)
 
 addDays :: Day -> YMD -> Day
@@ -63,7 +65,7 @@ addDays original (YMD y m d) = addMonthsAndDays $ addYears original
     monthsToAdd      = fromIntegral m
     daysToAdd        = fromIntegral d
     addMonthsAndDays =
-      addGregorianDurationRollOver $ (CalendarDiffDays monthsToAdd daysToAdd)
+      addGregorianDurationRollOver $ CalendarDiffDays monthsToAdd daysToAdd
     addYears         = addGregorianYearsRollOver y
 
 diffDays :: Day -> Day -> YMD
@@ -82,7 +84,7 @@ ymd2Day ymd = let year'  = fromIntegral $ year  ymd
                 Just day -> return day
 
 day2YMD :: Day -> YMD
-day2YMD day = let (y, m, d) = toGregorian day 
+day2YMD day = let (y, m, d) = toGregorian day
                in YMD y (fromIntegral m) (fromIntegral d)
 
 negateYMD :: YMD -> YMD

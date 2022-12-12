@@ -1,4 +1,4 @@
-import Data.Either (isRight)
+import Data.Either (isRight, isLeft)
 
 import System.FilePath ((</>))
 
@@ -14,18 +14,26 @@ buildExpectations mkExpectation =
 
 parseTests :: IO ()
 parseTests = do
-  fileNames    <- listDirectory base_dir
-  fileContents <- mapM (readFile . (base_dir </>)) fileNames
-  runParseTests fileContents
+  getAbsolutePathsInDirectory success_dir >>= runParseTests True
+  getAbsolutePathsInDirectory failure_dir >>= runParseTests False
   where 
-    base_dir :: FilePath
-    base_dir = "test/files/parser"
+    base_dir    = "test/files/parser"
+    success_dir = base_dir </> "success"
+    failure_dir = base_dir </> "failure"
 
-    runParseTests :: [String] -> IO ()
-    runParseTests =
-      hspec . (describe "Parse Tests") . (buildExpectations parseSucceeds)
+    getAbsolutePathsInDirectory :: FilePath -> IO [FilePath]
+    getAbsolutePathsInDirectory path = do
+      files <- listDirectory path
+      return $ map (path </>) files
+
+    runParseTests :: Bool -> [FilePath] -> IO ()
+    runParseTests shouldSucceed paths = do
+      manyFileContents <- traverse readFile paths
+      hspec $ describe ("Parse " ++ show shouldSucceed ++ " Tests")
+            $ buildExpectations parseSucceeds manyFileContents
       where parseSucceeds input =
-              it input $ (parseDater input) `shouldSatisfy` isRight
+              it input $ parseDater input `shouldSatisfy` expectedResult
+            expectedResult = if shouldSucceed then isRight else isLeft
 
 main :: IO ()
 main = parseTests

@@ -54,19 +54,18 @@ reservedOp :: String -> Parser ()
 reservedOp = Token.reservedOp lexer
 
 ymdParser :: Parser YMD
-ymdParser = do
-  year  <- integer
-  _     <- reservedOp "/"
-  month <- integer
-  _     <- reservedOp "/"
-  day   <- integer
-  return $ YMD year month day
+ymdParser = ymdParser' <|> sugarParser
+  where ymdParser' = do
+          year  <- integer
+          _     <- reservedOp "/"
+          month <- integer
+          _     <- reservedOp "/"
+          YMD year month <$> integer
 
 dayParser :: Parser YMD
 dayParser = do
   _   <- reserved "day"
-  num <- integer
-  return $ YMD 0 0 num
+  YMD 0 0 <$> integer
 
 weekParser :: Parser YMD
 weekParser = do
@@ -93,8 +92,7 @@ todayParser :: Parser Date
 todayParser = reserved "today" >> return Today
 
 dateParser :: Parser Date
-dateParser = todayParser <|> dateParser'
-  where dateParser' = liftM Date (ymdParser <|> sugarParser)
+dateParser = todayParser <|> fmap Date ymdParser
 
 numOpParser :: Parser NumOp
 numOpParser =  (reservedOp "+" >> return Add)
@@ -107,19 +105,17 @@ exprParser :: Parser Expr
 exprParser = do
   date <- dateParser
   let dateExpr :: Parser Expr
-      dateExpr = return $ DateExpr $ date
+      dateExpr = return $ DateExpr date
 
       numOp :: Parser Expr
       numOp = do
         op  <- numOpParser
-        ymd <- ymdParser
-        return $ NumOp op date ymd
+        NumOp op date <$> ymdParser
 
       diffOp :: Parser Expr
       diffOp = do
-        op   <- diffOpParser
-        date <- dateParser
-        return $ DiffOp op date date
+        op    <- diffOpParser
+        DiffOp op date <$> dateParser
 
    in numOp <|> diffOp <|> dateExpr
 

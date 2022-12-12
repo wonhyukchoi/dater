@@ -15,6 +15,7 @@ data Expr =
     DateExpr Date
   | NumOp NumOp Date YMD
   | DiffOp DiffOp Date Date
+  deriving (Show)
 
 data NumOp = Add | Sub deriving (Show, Eq)
 
