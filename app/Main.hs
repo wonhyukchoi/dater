@@ -16,8 +16,7 @@ import System.Console.ANSI
   , hSetSGR
   )
 
-import Parser (parseDater)
-import Eval (eval)
+import Lib (process)
 
 main :: IO ()
 main = do
@@ -29,22 +28,20 @@ main = do
       case minput of
         Nothing    -> return ()
         Just ":q"  -> outputStrLn "Goodbye."
-        Just input -> (liftIO $ process input) >> loop
+        Just input -> liftIO (printResult input) >> loop
 
-process :: String -> IO ()
-process line = case parseDater line of
-  Left err   -> printErr err
-  Right expr -> do
-    result <- eval expr
-    case result of
-      Left err   -> printErr err
-      Right date -> print date
+printResult :: String -> IO ()
+printResult line = do
+  result <- process line
+  case result of
+    Left  err  -> printErr err
+    Right expr -> putStrLn expr
 
 printInfo :: IO ()
 printInfo = do
-  hSetSGR   stdout [ SetColor Foreground Vivid Blue ]
-  hPutStrLn stdout info
-  hSetSGR   stdout [ Reset ] 
+  hSetSGR  stdout [ SetColor Foreground Vivid Blue ]
+  putStrLn info
+  hSetSGR  stdout [ Reset ]
   where info = unlines [ "Welcome to dater, date calculations done easy!"
                        , "Example Usages:"
                        , "dater $> today +  week 9"
@@ -52,8 +49,8 @@ printInfo = do
                        , "dater $> today <> 1997 / 4 / 10"
                        ]
 
-printErr :: (Show a) => a -> IO ()
+printErr :: String -> IO ()
 printErr s = do
   hSetSGR   stderr [ SetColor Foreground Vivid Red ]
-  hPutStrLn stderr $ show s
-  hSetSGR   stderr [ Reset ] 
+  hPutStrLn stderr s
+  hSetSGR   stderr [ Reset ]
