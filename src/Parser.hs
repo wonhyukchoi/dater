@@ -77,13 +77,13 @@ monthParser :: Parser YMD
 monthParser = do
   _   <- reserved "month"
   num <- integer
-  return $ YMD 0 1 0
+  return $ YMD 0 num 0
 
 yearParser :: Parser YMD
 yearParser = do
   _   <- reserved "year"
   num <- integer
-  return $ YMD 1 0 0
+  return $ YMD num 0 0
 
 sugarParser :: Parser YMD
 sugarParser = dayParser <|> weekParser <|> monthParser <|> yearParser
