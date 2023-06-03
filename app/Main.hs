@@ -43,10 +43,26 @@ printInfo = do
   putStrLn info
   hSetSGR  stdout [ Reset ]
   where info = unlines [ "Welcome to dater, date calculations done easy!"
+                       , ""
+                       , "Use + and - to add/subtrace from a date,"
+                       , "and <> to find the difference between two dates."
+                       , ""
+                       , "Grammar:"
+                       , "DATER := DATE (+/-) DIFF"
+                       , "       | DATE  <>   DATE"
+                       , "DATE  := year/month/day | today"
+                       , "DIFF  := year/month/day"
+                       , "       |  year  (n)"
+                       , "       |  month (n)"
+                       , "       |  day   (n)"
+                       , ""
                        , "Example Usages:"
                        , "dater $> today +  week 9"
+                       , "2023/8/5"
                        , "dater $> 2022/11/22 - 0/11/1"
+                       , "2021/12/21"
                        , "dater $> today <> 1997 / 4 / 10"
+                       , "26/1/24"
                        ]
 
 printErr :: String -> IO ()
